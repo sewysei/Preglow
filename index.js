@@ -5,28 +5,34 @@ import dotenv from "dotenv";
 dotenv.config();
 const app = express();
 
-const origins = ["http://localhost:3000", "https://nutriste-black.vercel.app"];
+// const origins = ["http://localhost:3000", "https://nutriste-black.vercel.app"];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin) return callback(null, true);
 
-      if (origins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+//       if (origins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true,
+//   })
+// );
 
 app.use(express.json());
 
 app.get("/", (req, res) => {
   res.status(200).json({
     message: "Server is running",
+  });
+});
+
+app.get("/tesdawg", (req, res) => {
+  res.status(200).json({
+    message: "tesdawg",
   });
 });
 
