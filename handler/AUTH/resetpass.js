@@ -1,7 +1,7 @@
 import User from "../../models/Users.js";
 import sendEmail from "./sendmail.js";
 import crypto from "crypto";
-import { sendOTP } from "./sendotp.js";
+import { sendOTP } from "./sendOTP.js";
 
 export const resetPassword = async (req, res) => {
   try {
