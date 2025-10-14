@@ -2,7 +2,7 @@ import User from "../../models/Users.js";
 import sendEmail from "./sendmail.js";
 import crypto from "crypto";
 
-export const sendOtp = async (req, res) => {
+export const sendOTP = async (req, res) => {
   try {
     const email = req.cookies.resetTokenEmail;
     const user = await User.findOne({ email });
