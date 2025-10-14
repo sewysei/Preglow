@@ -1,7 +1,7 @@
 import User from "../../models/Users.js";
 import sendEmail from "./sendmail.js";
 import crypto from "crypto";
-import { sendOTP } from "./sendOTP.js";
+import { sendOtp } from "./sendotp.js";
 
 export const resetPassword = async (req, res) => {
   try {
@@ -55,7 +55,7 @@ export const resetPassword = async (req, res) => {
     }
 
     if (!user.isVerified) {
-      sendOTP;
+      sendOtp;
     }
     await res.clearCookie("resetTokenEmail");
   } catch (error) {

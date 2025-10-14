@@ -3,16 +3,16 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { connectDB } from "./database.js";
-import { sendOTP } from "./handler/auth/sendOTP.js";
-import { register } from "./handler/auth/register.js";
-import { login } from "./handler/auth/login.js";
-import { forgetPassword } from "./handler/auth/forgetpass.js";
-import { resetPassword } from "./handler/auth/resetpass.js";
-import { verifyRegistration } from "./handler/auth/verifyregis.js";
+import { sendOtp } from "./handler/auth2forgetpass.js";
+import { register } from "./handler/auth2/register.js";
+import { login } from "./handler/auth2/login.js";
+import { forgetPassword } from "./handler/auth2/forgetpass.js";
+import { resetPassword } from "./handler/auth2/resetpass.js";
+import { verifyRegistration } from "./handler/auth2/verifyregis.js";
 import { authenticateToken } from "./middleware/auth.js";
-import { logout } from "./handler/auth/logout.js";
-import { chatbot } from "./handler/chatbot/assistant.js";
-import { getChatHistory } from "./handler/chatbot/getChatHistory.js";
+import { logout } from "./handler/auth2/logout.js";
+import { chatbot } from "./handler/chatbot2/assistant.js";
+import { getChatHistory } from "./handler/chatbot2/chatmsg.js";
 
 dotenv.config();
 const app = express();
@@ -52,7 +52,7 @@ app.post("/auth/login", login);
 
 app.post("/auth/forget-password", forgetPassword);
 
-app.get("/auth/send-otp", sendOTP);
+app.get("/auth/send-otp", sendOtp);
 
 app.post("/auth/reset-password", resetPassword);
 
