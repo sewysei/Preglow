@@ -3,12 +3,16 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { connectDB } from "./database.js";
-import { sendOTP } from "./handler/AUTH/sendotp.js";
-import { register } from "./handler/AUTH/register.js";
-import { login } from "./handler/AUTH/login.js";
-import { forgetPassword } from "./handler/AUTH/forgetpass.js";
-import { resetPassword } from "./handler/AUTH/resetpass.js";
-import { verifyRegistration } from "./handler/AUTH/verifyregis.js";
+import { sendOTP } from "./handler/auth/sendotp.js";
+import { register } from "./handler/auth/register.js";
+import { login } from "./handler/auth/login.js";
+import { forgetPassword } from "./handler/auth/forgetpass.js";
+import { resetPassword } from "./handler/auth/resetpass.js";
+import { verifyRegistration } from "./handler/auth/verifyregis.js";
+import { authenticateToken } from "./middleware/auth.js";
+import { logout } from "./handler/auth/logout.js";
+import { chatbot } from "./handler/CHATBOT/chatbot.js";
+import { getChatHistory } from "./handler/CHATBOT/chatmsg.js";
 
 dotenv.config();
 const app = express();
@@ -53,6 +57,12 @@ app.get("/auth/send-otp", sendOTP);
 app.post("/auth/reset-password", resetPassword);
 
 app.post("/auth/verify-registration", verifyRegistration);
+
+app.get("/auth/logout", logout);
+
+app.post("/chatbot", authenticateToken, chatbot);
+
+app.get("/chatbot-history", authenticateToken, getChatHistory);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
