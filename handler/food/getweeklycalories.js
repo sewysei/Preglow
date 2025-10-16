@@ -3,17 +3,14 @@ import mongoose from "mongoose";
 
 export const getWeeklyCalories = async (req, res) => {
   try {
-    // 1. Ambil userId dari objek request
     const userId = req.userId;
 
-    // Validasi: Pastikan userId ada di request
     if (!userId) {
       return res
         .status(401)
-        .json({ message: "Akses tidak diizinkan. Silakan login kembali." });
+        .json({ message: "Unauthorized. User ID missing." });
     }
 
-    // Tentukan rentang tanggal: 7 hari terakhir termasuk hari ini
     const today = new Date();
     today.setHours(23, 59, 59, 999); // Set ke akhir hari ini
 
@@ -53,11 +50,9 @@ export const getWeeklyCalories = async (req, res) => {
       },
     ]);
 
-    // 2. Kirim hasil sebagai response JSON
     return res.status(200).json(weeklyCalories);
   } catch (error) {
-    console.error("Gagal mengambil data kalori mingguan:", error);
-    // 3. Kirim response error jika terjadi masalah
-    return res.status(500).json({ message: "Terjadi kesalahan pada server." });
+    console.error("Failed fetch weekly calories:", error);
+    return res.status(500).json({ message: "Server Error" });
   }
 };

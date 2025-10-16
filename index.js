@@ -9,6 +9,7 @@ import addDataRoutes from "./routes/addDataRoutes.js";
 import dashbordRoutes from "./routes/dashboardRoutes.js";
 import chatbotRoutes from "./routes/chatbotRoutes.js";
 import foodRoutes from "./routes/foodRoutes.js";
+import moodRoutes from "./routes/moodRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -52,6 +53,8 @@ app.use("/dashboard", dashbordRoutes);
 app.use("/menu/chatbot", chatbotRoutes);
 
 app.use("/menu/food", foodRoutes);
+
+app.use("/menu/mood", moodRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

@@ -25,7 +25,9 @@ export const addFood = async (req, res) => {
 
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(403).json({ message: "Forbidden" });
+      return res
+        .status(401)
+        .json({ message: "Unauthorized. User ID missing." });
     }
 
     const result = await ai.models.generateContent({
