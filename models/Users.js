@@ -37,8 +37,8 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
 
-    pregnancy_age: {
-      type: Number,
+    pregnancy_date: {
+      type: String,
     },
 
     verificationCode: {

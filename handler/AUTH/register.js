@@ -5,9 +5,9 @@ dotenv.config();
 
 export const register = async (req, res) => {
   try {
-    const { username, email, password, pregnancyAge } = req.body;
+    const { username, email, password, pregnancyDate } = req.body;
 
-    if (!username || !email || !password || !pregnancyAge) {
+    if (!username || !email || !password || !pregnancyDate) {
       return res.status(400).json({ message: "All fields are required !" });
     }
 
@@ -25,7 +25,7 @@ export const register = async (req, res) => {
       username,
       email,
       password,
-      pregnancy_age: pregnancyAge,
+      pregnancy_date: pregnancyDate,
       verificationCode,
       verificationCodeExpires: Date.now() + 10 * 60 * 1000, // Kode berlaku 10 menit
     });

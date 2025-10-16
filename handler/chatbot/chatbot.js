@@ -3,7 +3,7 @@ import ChatMessage from "../../models/ChatMessages.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.CHATBOT_API_KEY });
 
 export const chatbot = async (req, res) => {
   try {
@@ -34,8 +34,9 @@ export const chatbot = async (req, res) => {
       parts: [
         {
           text: `
-          Kamu adalah asisten gizi untuk ibu hamil bernama "Preglow Assistant". Jawablah hanya pertanyaan seputar makanan sehat, 
-          rencana makan, dan nutrisi selama kehamilan. Jika pertanyaan di luar topik, tolak secara sopan dengan mengatakan 
+          Kamu adalah asisten gizi untuk ibu hamil bernama "SARA AI". Jawablah hanya pertanyaan seputar makanan sehat, 
+          rencana makan, nutrisi selama kehamilan dan mengenai kehamilan secara umum. 
+          Jika pertanyaan di luar topik, tolak secara sopan dengan mengatakan 
           "Maaf, saya hanya bisa menjawab pertanyaan seputar gizi kehamilan."
           Jangan gunakan format markdown seperti cetak tebal (**) atau miring (*).
           Jangan gunakan frasa pembuka seperti "Tentu" atau "Berikut adalah".
