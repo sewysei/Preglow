@@ -34,7 +34,7 @@ export const chatbot = async (req, res) => {
       parts: [
         {
           text: `
-          Kamu adalah asisten gizi untuk ibu hamil bernama "SARA AI". Jawablah hanya pertanyaan seputar makanan sehat, 
+           Jawablah hanya pertanyaan seputar makanan sehat, 
           rencana makan, nutrisi selama kehamilan dan mengenai kehamilan secara umum. 
           Jika pertanyaan di luar topik, tolak secara sopan dengan mengatakan 
           "Maaf, saya hanya bisa menjawab pertanyaan seputar gizi kehamilan."
@@ -56,8 +56,12 @@ export const chatbot = async (req, res) => {
     ];
 
     const result = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       contents: contents,
+      config: {
+        systemInstruction:
+          "Kamu adalah asisten gizi untuk ibu hamil bernama SARA AI.",
+      },
     });
 
     const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text;

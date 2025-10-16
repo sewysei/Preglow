@@ -8,6 +8,7 @@ import landingRoutes from "./routes/landingRoutes.js";
 import addDataRoutes from "./routes/addDataRoutes.js";
 import dashbordRoutes from "./routes/dashboardRoutes.js";
 import chatbotRoutes from "./routes/chatbotRoutes.js";
+import foodRoutes from "./routes/foodRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -49,6 +50,8 @@ app.use("/add", addDataRoutes);
 app.use("/dashboard", dashbordRoutes);
 
 app.use("/menu/chatbot", chatbotRoutes);
+
+app.use("/menu/food", foodRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
