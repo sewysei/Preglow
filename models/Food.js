@@ -7,10 +7,10 @@ const foodSchema = new mongoose.Schema(
       ref: "user",
       required: true,
     },
-    categoryId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "foodCategory",
-      required: true,
+    category: {
+      type: String,
+      enum: ["Breakfast", "Lunch", "Dinner", "Snack"],
+      default: "Snack",
     },
     name: {
       type: String,

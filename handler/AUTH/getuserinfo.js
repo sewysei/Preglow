@@ -18,6 +18,13 @@ export const getUserInfo = async (req, res) => {
       });
     }
 
+    if (user.pregnancy_status === "Born") {
+      return res.status(200).json({
+        username: user.username,
+        user_status: "Born",
+      });
+    }
+
     const pregnancyStr = user?.pregnancy_date?.toString();
 
     if (!pregnancyStr || pregnancyStr.length < 8) {

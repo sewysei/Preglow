@@ -1,5 +1,5 @@
 import { getFAQ } from "../handler/faq/getfaq.js";
-import { getLandingEdu } from "../handler/education/getdashboardedu.js";
+import { getLandingEdu } from "../handler/education/getlandingedu.js";
 import express from "express";
 
 const router = express.Router();

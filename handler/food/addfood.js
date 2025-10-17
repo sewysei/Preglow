@@ -1,4 +1,3 @@
-import FoodCategory from "../../models/FoodCategory.js";
 import Food from "../../models/Food.js";
 import User from "../../models/Users.js";
 import { GoogleGenAI } from "@google/genai";
@@ -18,16 +17,36 @@ export const addFood = async (req, res) => {
         .json({ message: "Name and category are required" });
     }
 
-    const categoryDoc = await FoodCategory.findOne({ name: category });
-    if (!categoryDoc) {
-      return res.status(400).json({ message: "Invalid food category" });
-    }
-
     const user = await User.findById(userId);
     if (!user) {
       return res
         .status(401)
         .json({ message: "Unauthorized. User ID missing." });
+    }
+
+    const allowedCategory = ["Breakfast", "Lunch", "Dinner", "Snack"];
+    if (!allowedCategory.includes(category)) {
+      return res.status(400).json({ message: "Invalid food category value." });
+    }
+
+    const sameFood = await Food.findOne({ name: name.trim() });
+
+    if (sameFood) {
+      const newFood = new Food({
+        userId: user._id,
+        category,
+        name,
+        calories: sameFood.calories,
+        protein: sameFood.protein,
+        carbs: sameFood.carbs,
+        fat: sameFood.fat,
+      });
+      await newFood.save();
+
+      res.status(200).json({
+        message: "Food added successfully",
+        food: newFood,
+      });
     }
 
     const result = await ai.models.generateContent({
@@ -65,7 +84,7 @@ export const addFood = async (req, res) => {
 
     const newFood = new Food({
       userId: user._id,
-      categoryId: categoryDoc._id,
+      category,
       name,
       calories,
       protein,
@@ -75,7 +94,7 @@ export const addFood = async (req, res) => {
 
     await newFood.save();
 
-    res.status(201).json({
+    res.status(200).json({
       message: "Food added successfully",
       food: newFood,
     });

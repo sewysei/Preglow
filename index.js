@@ -56,6 +56,8 @@ app.use("/menu/food", foodRoutes);
 
 app.use("/menu/mood", moodRoutes);
 
+// app.use("/menu/forum", forumRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });

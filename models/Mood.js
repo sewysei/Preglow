@@ -7,10 +7,21 @@ const moodSchema = new mongoose.Schema(
       ref: "user",
       required: true,
     },
-    categoryId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "moodCategory",
-      required: true,
+    category: {
+      type: String,
+      enum: [
+        "Happy",
+        "Sad",
+        "Anxious",
+        "Angry",
+        "Bored",
+        "Irritated",
+        "Moody",
+        "Sensitive",
+        "Tired",
+        "Loved",
+      ],
+      default: "Happy",
     },
     daily_feelings: {
       type: String,

@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema(
       required: [true],
       unique: true,
       trim: true,
-      maxlength: [100],
     },
 
     email: {
@@ -18,17 +17,12 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      maxlength: [200],
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Format email tidak valid",
-      ],
+      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/],
     },
 
     password: {
       type: String,
-      required: [true, "Password wajib diisi"],
-      maxlength: [300, "Password (setelah di-hash) maksimal 255 karakter"],
+      required: true,
       select: false,
     },
 
@@ -39,6 +33,12 @@ const userSchema = new mongoose.Schema(
 
     pregnancy_date: {
       type: String,
+    },
+
+    pregnancy_status: {
+      type: String,
+      enum: ["Pregnant", "Born"],
+      default: "Pregnant",
     },
 
     verificationCode: {
