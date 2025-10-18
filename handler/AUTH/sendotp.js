@@ -3,7 +3,7 @@ import sendEmail from "./sendmail.js";
 
 export const sendOTP = async (req, res) => {
   try {
-    const email = req.cookies.resetTokenEmail;
+    const email = req.body;
     const user = await User.findOne({ email });
     const resetToken = Math.floor(1000 + Math.random() * 9000).toString();
     const resetTokenExpires = Date.now() + 10 * 60 * 1000;

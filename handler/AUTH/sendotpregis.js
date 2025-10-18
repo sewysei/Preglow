@@ -3,7 +3,7 @@ import sendEmail from "./sendmail.js";
 
 export const sendOTPRegis = async (req, res) => {
   try {
-    const email = req.cookies.verifyToken;
+    const email = req.body;
     const user = await User.findOne({ email });
     const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
     const verificationCodeExpires = Date.now() + 10 * 60 * 1000;
