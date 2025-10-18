@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { UserModel } from "../../models/Users.js";
+import User from "../../models/Users.js";
 
 export const logoutUser = async (req, res) => {
   const authHeader = req.headers.authorization;
@@ -15,7 +15,7 @@ export const logoutUser = async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
 
-    const user = await UserModel.findById(userId);
+    const user = await User.findById(userId);
     console.log(`User ${user.username} logged out.`);
 
     return res.status(200).json({
