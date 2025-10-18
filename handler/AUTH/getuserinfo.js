@@ -11,11 +11,8 @@ export const getUserInfo = async (req, res) => {
     }
 
     const user = await User.findById(userId);
-
     if (!user) {
-      return res.status(404).json({
-        message: "User not found.",
-      });
+      return res.status(404).json({ message: "User not found." });
     }
 
     if (user.pregnancy_status === "Born") {
@@ -25,32 +22,30 @@ export const getUserInfo = async (req, res) => {
       });
     }
 
-    const pregnancyStr = user?.pregnancy_date?.toString();
+    const pregnancyDateStr = user?.pregnancy_date;
 
-    if (!pregnancyStr || pregnancyStr.length < 8) {
+    if (!pregnancyDateStr) {
       return res.status(400).json({
         status: "Failed",
-        message:
-          "Invalid or missing 'pregnancy_date'. Expected format: 'ddmmyyyy'.",
+        message: "Missing 'pregnancy_date'. Expected format: 'dd-mm-yyyy'.",
       });
     }
 
-    const day = pregnancyStr.slice(0, 2);
-    const month = pregnancyStr.slice(2, 4);
-    const year = pregnancyStr.slice(4, 8);
-
-    const startDate = new Date(`${year}-${month}-${day}`);
+    const [day, month, year] = pregnancyDateStr.split("/").map(Number);
+    const startDate = new Date(year, month - 1, day);
 
     if (isNaN(startDate.getTime())) {
       return res.status(400).json({
         status: "Failed",
-        message: "Invalid date format in 'pregnancy_date'.",
+        message:
+          "Invalid date format in 'pregnancy_date'. Expected dd-mm-yyyy.",
       });
     }
 
     const currentDate = new Date();
-    const diffTime = Math.abs(currentDate - startDate);
-    const pregnancyWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+    const diffTime = currentDate - startDate;
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    const pregnancyWeeks = Math.floor(diffDays / 7);
 
     res.status(200).json({
       username: user.username,
