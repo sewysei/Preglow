@@ -1,6 +1,5 @@
 import User from "../../models/Users.js";
 import sendEmail from "./sendmail.js";
-import crypto from "crypto";
 
 export const sendOTP = async (req, res) => {
   try {
