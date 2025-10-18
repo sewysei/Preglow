@@ -1,8 +1,19 @@
 import User from "../../models/Users.js";
+import jwt from "jsonwebtoken";
 
 export const getUserInfo = async (req, res) => {
   try {
-    const userId = req.userId;
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        status: "Failed",
+        message: "Tidak ada token dikirim.",
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
 
     if (!userId) {
       return res.status(401).json({
@@ -38,7 +49,7 @@ export const getUserInfo = async (req, res) => {
       return res.status(400).json({
         status: "Failed",
         message:
-          "Invalid date format in 'pregnancy_date'. Expected dd-mm-yyyy.",
+          "Invalid date format in 'pregnancy_date'. Expected dd/mm/yyyy.",
       });
     }
 
