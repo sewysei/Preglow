@@ -4,7 +4,17 @@ import sendEmail from "./sendmail.js";
 export const sendOTP = async (req, res) => {
   try {
     const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required!" });
+    }
+
     const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
     const resetToken = Math.floor(1000 + Math.random() * 9000).toString();
     const resetTokenExpires = Date.now() + 10 * 60 * 1000;
 
@@ -36,7 +46,8 @@ export const sendOTP = async (req, res) => {
       return res.status(500).json({ message: "Failed to send email." });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "A server error occurred." });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

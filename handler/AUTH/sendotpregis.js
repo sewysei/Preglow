@@ -3,13 +3,14 @@ import sendEmail from "./sendmail.js";
 
 export const sendOTPRegis = async (req, res) => {
   try {
-    const { email } = req.body; // <-- ambil email langsung
+    const { email } = req.body;
 
     if (!email) {
       return res.status(400).json({ message: "Email is required." });
     }
 
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
@@ -42,7 +43,8 @@ export const sendOTPRegis = async (req, res) => {
       message: "Account verification code sent to your email.",
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "A server error occurred." });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

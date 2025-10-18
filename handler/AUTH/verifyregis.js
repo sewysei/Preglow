@@ -6,9 +6,7 @@ export const verifyRegistration = async (req, res) => {
     const { verificationCode, email } = req.body;
 
     if (!email) {
-      return res
-        .status(400)
-        .json({ message: "Verification token is missing!" });
+      return res.status(400).json({ message: "Email is required!" });
     }
 
     if (!verificationCode) {
@@ -26,13 +24,9 @@ export const verifyRegistration = async (req, res) => {
     }
 
     if (user.isVerified) {
-      return res.status(400).json({ message: "User is already verified!" });
-    }
-
-    if (!user.verificationCode || !user.verificationCodeExpires) {
-      return res.status(400).json({
-        message: "No verification code found. Please register again.",
-      });
+      return res
+        .status(400)
+        .json({ message: "User is already verified! Please login" });
     }
 
     if (user.verificationCode !== verificationCode) {
@@ -44,7 +38,7 @@ export const verifyRegistration = async (req, res) => {
         1000 + Math.random() * 9000
       ).toString();
       user.verificationCode = newverificationCode;
-      user.verificationCodeExpires = Date.now() + 10 * 60 * 1000; // Kode berlaku 10 menit
+      user.verificationCodeExpires = Date.now() + 10 * 60 * 1000;
       await user.save();
 
       try {
@@ -60,7 +54,7 @@ export const verifyRegistration = async (req, res) => {
       `;
 
         await sendEmail({
-          email: user.email,
+          email: email,
           subject: "Account Verification Code",
           html: emailHtml,
         });
@@ -79,9 +73,9 @@ export const verifyRegistration = async (req, res) => {
     user.verificationCodeExpires = undefined;
     await user.save();
     res.status(200).json({ message: "Account verified successfully!" });
-    await res.clearCookie("verifyToken");
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "A server error occurred." });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

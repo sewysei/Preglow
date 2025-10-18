@@ -1,40 +1,25 @@
 import User from "../../models/Users.js";
 import sendEmail from "./sendmail.js";
-import crypto from "crypto";
-import { sendOTP } from "./sendotp.js";
 
 export const resetPassword = async (req, res) => {
   try {
-    const { newPassword } = req.body;
-    const email = req.cookies.resetTokenEmail;
+    const { newPassword, email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required!" });
+    }
 
     if (!newPassword) {
       return res.status(400).json({ message: "New password is required!" });
     }
 
-    const user = await User.findOne({ email }).select(
-      "+resetPasswordToken resetPasswordExpires"
-    );
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    if (!user.resetPasswordToken || !user.resetPasswordExpires) {
-      return res
-        .status(400)
-        .json({ message: "No reset token found. Please request a new one." });
-    }
-
-    if (user.resetPasswordExpires < Date.now()) {
-      return res.status(400).json({
-        message: "Reset token has expired. Please request a new one.",
-      });
-    }
-
     user.password = newPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
     await user.save();
     res.status(200).json({ message: "Password has been reset successfully." });
 
@@ -52,14 +37,11 @@ export const resetPassword = async (req, res) => {
       });
     } catch (emailError) {
       console.error(emailError);
+      return res.status(500).json({ message: "Failed to send email." });
     }
-
-    if (!user.isVerified) {
-      return sendOTP(req, res);
-    }
-    await res.clearCookie("resetTokenEmail");
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "A server error occurred." });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

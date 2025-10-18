@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-// Definisikan skema untuk koleksi tuser
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -33,12 +32,17 @@ const userSchema = new mongoose.Schema(
 
     pregnancy_date: {
       type: String,
+      default: () => new Date().toISOString().split("T")[0],
     },
 
     pregnancy_status: {
       type: String,
       enum: ["Pregnant", "Born"],
       default: "Pregnant",
+    },
+
+    token: {
+      type: String,
     },
 
     verificationCode: {

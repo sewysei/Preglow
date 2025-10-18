@@ -50,13 +50,6 @@ export const register = async (req, res) => {
         html: emailHtml,
       });
 
-      res.cookie("verifyToken", email, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
-
       res.status(201).json({
         message:
           "Registration successful! Please check your email for a verification code.",
@@ -73,9 +66,9 @@ export const register = async (req, res) => {
           "Registration was successful, but the verification email could not be sent.",
       });
     }
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: "A server error occurred: " + err.message });
+  } catch (error) {
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

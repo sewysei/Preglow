@@ -7,10 +7,12 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Please provide an email and password." });
+    if (!email) {
+      return res.status(400).json({ message: "Email is required!" });
+    }
+
+    if (!password) {
+      return res.status(400).json({ message: "Password is required!" });
     }
 
     const user = await User.findOne({ email }).select("+password");
@@ -21,7 +23,7 @@ export const login = async (req, res) => {
 
     if (!user.isVerified) {
       return res
-        .status(403)
+        .status(401)
         .json({ message: "Please verify your email address first." });
     }
 
@@ -34,12 +36,7 @@ export const login = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    await user.updateOne({ token: token });
 
     res.status(200).json({
       message: "Login successful.",
@@ -51,7 +48,8 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "A server error occurred." });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

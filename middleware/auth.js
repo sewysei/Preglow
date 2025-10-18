@@ -2,19 +2,19 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const authenticateToken = (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(401).json({ message: "Token not found" });
-  }
+export const checkToken = (token) => {
   try {
-    const decodedPayload = jwt.verify(token, process.env.JWT_SECRET);
-
-    req.userId = decodedPayload.id;
-
-    next();
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return {
+      valid: true,
+      expired: false,
+      decoded,
+    };
   } catch (err) {
-    console.error("Token verification failed:", err);
-    return res.status(403).json({ message: "Invalid or expired token" });
+    return {
+      valid: false,
+      expired: err.name === "TokenExpiredError",
+      decoded: null,
+    };
   }
 };

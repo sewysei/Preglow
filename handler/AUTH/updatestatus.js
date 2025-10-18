@@ -1,10 +1,26 @@
 import User from "../../models/Users.js";
+import { checkToken } from "../../middleware/auth.js";
 
 export const changeUserStatus = async (req, res) => {
   try {
-    const userId = req.userId;
     const { status } = req.body;
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        status: "Failed",
+        message: "There is no Token sent!",
+      });
+    }
 
+    const token = authHeader.split(" ")[1];
+    const userId = decoded.id;
+    const { valid, expired, decoded } = checkToken(token);
+    if (!valid) {
+      return res.status(401).json({
+        status: "Failed",
+        message: expired ? "Token expired." : "Token invalid.",
+      });
+    }
     if (!userId) {
       return res.status(401).json({
         message: "Unauthorized. User ID is missing.",
@@ -28,12 +44,13 @@ export const changeUserStatus = async (req, res) => {
     await User.updateOne({ _id: userId }, { pregnancy_status: status });
 
     return res.status(200).json({
-      status: "Success",
+      message: "Success update pregnancy status!",
       username: user.username,
       user_status: status,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "A server error occurred." });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };
