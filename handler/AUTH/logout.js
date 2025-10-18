@@ -13,7 +13,7 @@ export const logout = async (req, res) => {
   const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.userId;
+    const userId = decoded.id;
 
     const user = await User.findById(userId);
     console.log(`User ${user.username} logged out.`);
