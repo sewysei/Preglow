@@ -3,8 +3,7 @@ import sendEmail from "./sendmail.js";
 
 export const verifyRegistration = async (req, res) => {
   try {
-    const email = req.cookies.verifyToken;
-    const { verificationCode } = req.body;
+    const { verificationCode, email } = req.body;
 
     if (!email) {
       return res
