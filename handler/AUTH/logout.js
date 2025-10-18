@@ -1,12 +1,31 @@
-export const logout = async (req, res) => {
-  try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+import jwt from "jsonwebtoken";
+import { UserModel } from "../../models/Users.js";
+
+export const logoutUser = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({
+      status: "Failed",
+      message: "Tidak ada token dikirim.",
     });
-    res.status(200).json({ message: "Logged out successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error logging out" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
+    const user = await UserModel.findById(userId);
+    console.log(`User ${user.username} logged out.`);
+
+    return res.status(200).json({
+      status: "Success",
+      message: "Logout berhasil.",
+    });
+  } catch (err) {
+    return res.status(401).json({
+      status: "Failed",
+      message: "Token tidak valid.",
+    });
   }
 };
