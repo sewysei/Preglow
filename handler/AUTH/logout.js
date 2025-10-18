@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../../models/Users.js";
 
-export const logoutUser = async (req, res) => {
+export const logout = async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({
