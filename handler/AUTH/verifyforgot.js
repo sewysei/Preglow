@@ -2,14 +2,14 @@ import User from "../../models/Users.js";
 
 export const verifyForgotPass = async (req, res) => {
   try {
-    const { email, otp } = req.body;
+    const { email, resetToken } = req.body;
 
     if (!email) {
       return res.status(400).json({ message: "Email is required!" });
     }
 
-    if (!otp) {
-      return res.status(400).json({ message: "OTP is required!" });
+    if (!resetToken) {
+      return res.status(400).json({ message: "Reset Token is required!" });
     }
 
     const user = await User.findOne({ email }).select(
@@ -62,9 +62,9 @@ export const verifyForgotPass = async (req, res) => {
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
       await user.save();
-      return res.status(200).json({ message: "OTP verified!" });
+      return res.status(200).json({ message: "Reset Password verified!" });
     } else {
-      return res.status(401).json({ message: "OTP did not match" });
+      return res.status(401).json({ message: "Reset Token did not match" });
     }
   } catch (error) {
     return res.status(500).json({

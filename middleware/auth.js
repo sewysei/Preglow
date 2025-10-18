@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const checkToken = (token) => {
+const checkToken = (token) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     return {
@@ -18,3 +18,5 @@ export const checkToken = (token) => {
     };
   }
 };
+
+export default checkToken;
