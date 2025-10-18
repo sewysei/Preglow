@@ -12,18 +12,18 @@ const router = express.Router();
 
 router.post("/register", register);
 
-router.get("/send-otp-regis", sendOTPRegis);
+router.post("/send-otp-regis", sendOTPRegis);
 
 router.post("/login", login);
 
 router.post("/forget-password", forgetPassword);
 
-router.get("/send-otp-reset", sendOTP);
+router.post("/send-otp-reset", sendOTP);
 
 router.post("/reset-password", resetPassword);
 
 router.post("/verify-registration", verifyRegistration);
 
-router.get("/logout", logout);
+router.post("/logout", logout);
 
 export default router;
