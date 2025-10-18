@@ -15,7 +15,7 @@ dotenv.config();
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
-connectDB();
+await connectDB();
 
 const origins = [
   "http://localhost:3000",
