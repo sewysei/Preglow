@@ -13,8 +13,8 @@ export const changeUserStatus = async (req, res) => {
     }
 
     const token = authHeader.split(" ")[1];
-    const userId = decoded.id;
     const { valid, expired, decoded } = checkToken(token);
+    const userId = decoded.id;
     if (!valid) {
       return res.status(401).json({
         status: "Failed",
