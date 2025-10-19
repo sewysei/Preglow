@@ -15,17 +15,20 @@ export const getDailyNutrition = async (req, res) => {
     const token = authHeader.split(" ")[1];
     const { valid, expired, decoded } = checkToken(token);
     const userId = decoded.id;
+
     if (!valid) {
       return res.status(401).json({
         status: "Failed",
         message: expired ? "Token expired." : "Token invalid.",
       });
     }
+
     if (await isBlacklisted(token)) {
-      return res
-        .status(401)
-        .json({ message: "Token has been invalidated. Please login again." });
+      return res.status(401).json({
+        message: "Token has been invalidated. Please login again.",
+      });
     }
+
     if (!userId) {
       return res.status(401).json({
         message: "Unauthorized. User ID is missing.",
@@ -43,7 +46,7 @@ export const getDailyNutrition = async (req, res) => {
       createdAt: { $gte: startOfDay, $lte: endOfDay },
     });
 
-    const nutrition = foods.reduce(
+    const totalNutrition = foods.reduce(
       (acc, food) => {
         acc.calories += food.calories || 0;
         acc.protein += food.protein || 0;
@@ -54,9 +57,24 @@ export const getDailyNutrition = async (req, res) => {
       { calories: 0, protein: 0, carbs: 0, fat: 0 }
     );
 
+    const lastFood = await Food.findOne({
+      userId,
+      createdAt: { $gte: startOfDay, $lte: endOfDay },
+    }).sort({ createdAt: -1 });
+
+    const lastNutrition = lastFood
+      ? {
+          calories: lastFood.calories || 0,
+          protein: lastFood.protein || 0,
+          carbs: lastFood.carbs || 0,
+          fat: lastFood.fat || 0,
+        }
+      : null;
+
     res.status(200).json({
-      message: "Success fetching daily nutrition",
-      nutrition,
+      message: "Success fetching daily nutrition data",
+      totalNutrition,
+      lastNutrition,
     });
   } catch (error) {
     res.status(500).json({
