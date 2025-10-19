@@ -18,22 +18,9 @@ app.use(cookieParser());
 app.use(express.json());
 await connectDB();
 
-const origins = [
-  "http://localhost:3000",
-  "https://preglow-project-k8l1r7hye-microcats7s-projects.vercel.app/",
-];
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-
-      if (origins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: true,
     credentials: true,
   })
 );
