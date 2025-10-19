@@ -57,7 +57,6 @@ export const getDailyNutrition = async (req, res) => {
     res.status(200).json({
       message: "Success fetching daily nutrition",
       nutrition,
-      count: foods.length,
     });
   } catch (error) {
     res.status(500).json({

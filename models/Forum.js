@@ -25,6 +25,8 @@ const forumSchema = new mongoose.Schema(
   }
 );
 
+forumSchema.index({ createdAt: -1 });
+
 const Forum = mongoose.model("forum", forumSchema);
 
 export default Forum;
