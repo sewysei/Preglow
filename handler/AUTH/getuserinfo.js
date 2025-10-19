@@ -32,14 +32,13 @@ export const getUserInfo = async (req, res) => {
         message: "User not found.",
       });
     }
-
     if (user.pregnancy_status === "Born") {
       return res.status(200).json({
         username: user.username,
         user_status: "Born",
+        pregnancy_weeks: null,
       });
     }
-
     const pregnancyDateStr = user?.pregnancy_date;
 
     if (!pregnancyDateStr) {
@@ -67,6 +66,7 @@ export const getUserInfo = async (req, res) => {
       message: "Success fetching user information!",
       username: user.username,
       pregnancy_weeks: pregnancyWeeks,
+      status: user.pregnancy_status,
     });
   } catch (error) {
     res.status(500).json({

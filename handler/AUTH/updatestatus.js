@@ -41,8 +41,11 @@ export const changeUserStatus = async (req, res) => {
         .json({ message: "Invalid pregnancy status value." });
     }
 
-    await User.updateOne({ _id: userId }, { pregnancy_status: status });
-
+    if (status === "Born") {
+      user.pregnancy_date = null;
+    }
+    user.pregnancy_status = status;
+    await user.save();
     return res.status(200).json({
       message: "Success update pregnancy status!",
       username: user.username,
