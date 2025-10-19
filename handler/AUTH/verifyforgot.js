@@ -58,7 +58,7 @@ export const verifyForgotPass = async (req, res) => {
       }
     }
 
-    if (otp === user.resetPasswordToken) {
+    if (verificationCode === user.resetPasswordToken) {
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
       await user.save();
