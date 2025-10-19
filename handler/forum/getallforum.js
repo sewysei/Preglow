@@ -19,10 +19,7 @@ export const getAllForum = async (req, res) => {
       })
     );
 
-    // Return response
-    res.status(200).json({
-      forumsWithCommentCount,
-    });
+    res.status(200).json(forumsWithCommentCount);
   } catch (error) {
     res.status(500).json({
       message: "A server error occurred: " + error.message,
