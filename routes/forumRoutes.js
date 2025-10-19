@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/add", upload.single("photo"), addForum);
 
-router.get("/all/:page", getAllForum);
+router.get("/all", getAllForum);
 
 router.get("/:id", getForumById);
 
