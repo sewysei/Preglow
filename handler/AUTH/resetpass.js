@@ -3,7 +3,7 @@ import sendEmail from "./sendmail.js";
 
 export const resetPassword = async (req, res) => {
   try {
-    const { newPassword, email } = req.body;
+    const { newPassword, confirmPassword, email } = req.body;
 
     if (!email) {
       return res.status(400).json({ message: "Email is required!" });
@@ -11,6 +11,14 @@ export const resetPassword = async (req, res) => {
 
     if (!newPassword) {
       return res.status(400).json({ message: "New password is required!" });
+    }
+
+    if (!confirmPassword) {
+      return res.status(400).json({ message: "Confirm password is required!" });
+    }
+
+    if (confirmPassword !== newPassword) {
+      return res.status(400).json({ message: "Passowrd did not match!" });
     }
 
     const user = await User.findOne({ email });
