@@ -2,13 +2,13 @@ import User from "../../models/Users.js";
 
 export const verifyForgotPass = async (req, res) => {
   try {
-    const { email, resetToken } = req.body;
+    const { email, verificationCode } = req.body;
 
     if (!email) {
       return res.status(400).json({ message: "Email is required!" });
     }
 
-    if (!resetToken) {
+    if (!verificationCode) {
       return res.status(400).json({ message: "Reset Token is required!" });
     }
 
