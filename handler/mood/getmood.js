@@ -30,12 +30,11 @@ export const getMood = async (userId, duration) => {
       },
     ]);
 
-    const total = result.reduce((sum, item) => sum + item.count, 0);
+    const total = result.length;
 
     return { result, total };
   } catch (error) {
-    res.status(500).json({
-      message: "A server error occurred: " + error.message,
-    });
+    console.error("Error in getMood:", error.message);
+    throw new Error("A server error occurred: " + error.message);
   }
 };
