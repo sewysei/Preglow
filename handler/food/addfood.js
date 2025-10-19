@@ -120,7 +120,8 @@ export const addFood = async (req, res) => {
       food: newFood,
     });
   } catch (error) {
-    console.error("Error adding food:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

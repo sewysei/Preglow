@@ -11,7 +11,9 @@ export const getAffirmation = async (req, res) => {
     }
 
     res.status(200).json({ affirmation: randomAffirmation[0] });
-  } catch (err) {
-    res.status(500).json({ message: `Server error: ${err.message}` });
+  } catch (error) {
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

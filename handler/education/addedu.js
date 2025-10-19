@@ -26,6 +26,8 @@ export const addEducation = async (req, res) => {
       education: newEducation,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

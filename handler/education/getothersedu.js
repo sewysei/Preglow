@@ -5,6 +5,7 @@ export const getOthersEducation = async (req, res) => {
     const { id } = req.params;
 
     const others = await Education.find({ _id: { $ne: id } })
+      .select("title description photo")
       .limit(3)
       .sort({ createdAt: -1 });
 

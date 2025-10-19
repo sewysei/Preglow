@@ -5,7 +5,8 @@ export const getFAQ = async (req, res) => {
     const faqs = await FAQ.find();
     res.status(200).json(faqs);
   } catch (error) {
-    console.error("Error fetching FAQs:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

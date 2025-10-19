@@ -10,7 +10,8 @@ export const addFAQ = async (req, res) => {
     await newFAQ.save();
     res.status(201).json({ message: "FAQ added successfully", faq: newFAQ });
   } catch (error) {
-    console.error("Error adding FAQ:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };
