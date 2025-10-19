@@ -18,7 +18,7 @@ export const getForumById = async (req, res) => {
     res.status(200).json({
       message: "Success fetching forum by id",
       title: forum.title,
-      question: forum.content,
+      question: forum.question,
       photo: forum.photo,
       totalComments: commentCount,
     });
