@@ -8,12 +8,27 @@ const ai = new GoogleGenAI({ apiKey: process.env.CHATBOT_API_KEY });
 export const chatbot = async (req, res) => {
   try {
     const { message } = req.body;
-    const userId = req.userId;
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        status: "Failed",
+        message: "There is no Token sent!",
+      });
+    }
 
+    const token = authHeader.split(" ")[1];
+    const { valid, expired, decoded } = checkToken(token);
+    const userId = decoded.id;
+    if (!valid) {
+      return res.status(401).json({
+        status: "Failed",
+        message: expired ? "Token expired." : "Token invalid.",
+      });
+    }
     if (!userId) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized. User ID is missing." });
+      return res.status(401).json({
+        message: "Unauthorized. User ID is missing.",
+      });
     }
 
     if (!message) {
@@ -74,10 +89,9 @@ export const chatbot = async (req, res) => {
     await ChatMessage.create({ userId, role: "bot", text: reply });
 
     res.status(200).json({ reply });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
-      status: "Failed",
-      message: `Catch error ${err.message}`,
+      message: "A server error occurred: " + error.message,
     });
   }
 };

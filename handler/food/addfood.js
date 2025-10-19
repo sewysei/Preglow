@@ -9,19 +9,40 @@ const ai = new GoogleGenAI({ apiKey: process.env.FOOD_API_KEY });
 export const addFood = async (req, res) => {
   try {
     const { name, category } = req.body;
-    const userId = req.userId;
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        status: "Failed",
+        message: "There is no Token sent!",
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
+    const { valid, expired, decoded } = checkToken(token);
+    const userId = decoded.id;
+    if (!valid) {
+      return res.status(401).json({
+        status: "Failed",
+        message: expired ? "Token expired." : "Token invalid.",
+      });
+    }
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized. User ID is missing.",
+      });
+    }
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
 
     if (!name || !category) {
       return res
         .status(400)
         .json({ message: "Name and category are required" });
-    }
-
-    const user = await User.findById(userId);
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized. User ID missing." });
     }
 
     const allowedCategory = ["Breakfast", "Lunch", "Dinner", "Snack"];

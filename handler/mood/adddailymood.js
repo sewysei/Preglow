@@ -3,14 +3,35 @@ import User from "../../models/Users.js";
 
 export const addDailyMood = async (req, res) => {
   try {
-    const userId = req.userId;
     const { daily_feelings, category } = req.body;
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        status: "Failed",
+        message: "There is no Token sent!",
+      });
+    }
 
+    const token = authHeader.split(" ")[1];
+    const { valid, expired, decoded } = checkToken(token);
+    const userId = decoded.id;
+    if (!valid) {
+      return res.status(401).json({
+        status: "Failed",
+        message: expired ? "Token expired." : "Token invalid.",
+      });
+    }
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized. User ID is missing.",
+      });
+    }
     const user = await User.findById(userId);
+
     if (!user) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized. User ID missing." });
+      return res.status(404).json({
+        message: "User not found.",
+      });
     }
 
     const allowedCategory = [
@@ -48,7 +69,8 @@ export const addDailyMood = async (req, res) => {
       daily_mood: newMood,
     });
   } catch (error) {
-    console.error("Failed adding daily mood: ", error);
-    return res.status(500).json({ message: "Server Error" });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

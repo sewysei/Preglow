@@ -2,27 +2,40 @@ import Food from "../../models/Food.js";
 
 export const getDailyNutrition = async (req, res) => {
   try {
-    const userId = req.userId;
-    if (!userId) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized. User ID missing." });
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        status: "Failed",
+        message: "There is no Token sent!",
+      });
     }
 
-    // Tentukan rentang waktu untuk "hari ini"
+    const token = authHeader.split(" ")[1];
+    const { valid, expired, decoded } = checkToken(token);
+    const userId = decoded.id;
+    if (!valid) {
+      return res.status(401).json({
+        status: "Failed",
+        message: expired ? "Token expired." : "Token invalid.",
+      });
+    }
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized. User ID is missing.",
+      });
+    }
+
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
 
     const endOfDay = new Date();
     endOfDay.setHours(23, 59, 59, 999);
 
-    // Ambil semua food milik user hari ini
     const foods = await Food.find({
       userId,
       createdAt: { $gte: startOfDay, $lte: endOfDay },
     });
 
-    // Hitung total nutrisi
     const nutrition = foods.reduce(
       (acc, food) => {
         acc.calories += food.calories || 0;
@@ -35,11 +48,13 @@ export const getDailyNutrition = async (req, res) => {
     );
 
     res.status(200).json({
+      message: "Success fetching daily nutrition",
       nutrition,
       count: foods.length,
     });
   } catch (error) {
-    console.error("Error getting daily nutrition:", error);
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };

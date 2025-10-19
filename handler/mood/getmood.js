@@ -32,7 +32,8 @@ export const getMood = async (userId, duration) => {
 
     return result;
   } catch (error) {
-    console.error("Error getting mood counts:", error);
-    throw new Error("Failed to fetch mood data");
+    res.status(500).json({
+      message: "A server error occurred: " + error.message,
+    });
   }
 };
