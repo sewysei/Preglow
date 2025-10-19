@@ -36,7 +36,7 @@ export const getMonthlyMood = async (req, res) => {
 
     return res.status(200).json({
       message: "Successfully fetched mood data for the past 30 days.",
-      total_mood: total,
+      total_moods: total,
       mood_count: result,
     });
   } catch (error) {
