@@ -1,5 +1,5 @@
 import express from "express";
-import { upload } from "../middleware/fileupload.js";
+import upload from "../middleware/fileupload.js";
 import { addForum } from "../handler/forum/addforum.js";
 import { getAllForum } from "../handler/forum/getallforum.js";
 import { getForumById } from "../handler/forum/getforumbyid.js";

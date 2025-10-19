@@ -44,7 +44,6 @@ export const addEducation = async (req, res) => {
     });
 
     await newEducation.save();
-
     res.status(201).json({
       message: "Educational content added successfully!",
       education: newEducation,

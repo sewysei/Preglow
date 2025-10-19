@@ -37,9 +37,9 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoutes);
 
-app.use("/landing", landingRoutes);
-
 app.use("/add", addDataRoutes);
+
+app.use("/landing", landingRoutes);
 
 app.use("/dashboard", dashbordRoutes);
 
