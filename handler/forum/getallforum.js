@@ -12,7 +12,7 @@ export const getAllForum = async (req, res) => {
 
     // Fetch forums with pagination
     const forums = await Forum.find()
-      .select("title question photo createdAt")
+      .select("title question createdAt")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)

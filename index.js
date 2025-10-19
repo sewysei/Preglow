@@ -18,6 +18,8 @@ app.use(cookieParser());
 app.use(express.json());
 await connectDB();
 
+app.use("/uploads", express.static("uploads"));
+
 app.use(
   cors({
     origin: true,

@@ -1,5 +1,4 @@
 import Forum from "../../models/Forum.js";
-import User from "../../models/Users.js";
 import checkToken from "../../middleware/auth.js";
 import { isBlacklisted } from "../../middleware/auth.js";
 
@@ -32,38 +31,27 @@ export const addForum = async (req, res) => {
         message: "Unauthorized. User ID is missing.",
       });
     }
-
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found.",
-      });
+    if (!title || !question) {
+      return res
+        .status(400)
+        .json({ message: "Title and question are required." });
     }
 
-    if (!title) {
-      return res.status(400).json({ message: "Title is required!" });
-    }
-    if (!question) {
-      return res.status(400).json({ message: "Question is required!" });
-    }
-
-    let photoBase64 = null;
-
+    let photoUrl = null;
     if (req.file) {
-      photoBase64 = `data:${
-        req.file.mimetype
-      };base64,${req.file.buffer.toString("base64")}`;
+      const baseUrl = `${req.protocol}://${req.get("host")}`;
+      photoUrl = `${baseUrl}/uploads/${req.file.filename}`;
     }
 
     const newForum = new Forum({
-      userId: user._id,
       title,
       question,
-      photo: photoBase64,
+      photo: photoUrl,
+      userId,
     });
 
     await newForum.save();
+
     return res.status(200).json({
       message: "Success adding new forum!",
       title: newForum.title,

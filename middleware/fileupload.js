@@ -1,21 +1,29 @@
 import multer from "multer";
+import path from "path";
 
-const storage = multer.memoryStorage(); // <---- pakai memoryStorage agar ada buffer
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // max 5MB
-  fileFilter: (req, file, cb) => {
-    if (
-      file.mimetype === "image/jpeg" ||
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg"
-    ) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only JPEG, JPG, and PNG are allowed!"), false);
-    }
+// Tentukan lokasi penyimpanan file
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // simpan di folder /uploads/
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname)); // contoh: 1696582741-12345.png
   },
 });
 
-export default upload;
+// Filter file yang boleh diupload
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png/;
+  const extname = allowedTypes.test(
+    path.extname(file.originalname).toLowerCase()
+  );
+  const mimetype = allowedTypes.test(file.mimetype);
+  if (mimetype && extname) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only JPEG, JPG, and PNG files are allowed!"));
+  }
+};
+
+export const upload = multer({ storage, fileFilter });
