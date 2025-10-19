@@ -11,6 +11,17 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "All fields are required !" });
     }
 
+    const pregnancyDateStr = pregnancyDate;
+    const [day, month, year] = pregnancyDateStr.split("/").map(Number);
+    const startDate = new Date(year, month - 1, day);
+
+    if (isNaN(startDate.getTime())) {
+      return res.status(400).json({
+        message:
+          "Invalid date format in 'pregnancy_date'. Expected format: dd/mm/yyyy.",
+      });
+    }
+
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
 
     if (existingUser) {
