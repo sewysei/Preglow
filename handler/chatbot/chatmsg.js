@@ -1,4 +1,5 @@
 import ChatMessage from "../../models/ChatMessages.js";
+import checkToken from "../../middleware/auth.js";
 
 export const getChatHistory = async (req, res) => {
   try {

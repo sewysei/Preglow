@@ -1,6 +1,7 @@
 import Food from "../../models/Food.js";
 import User from "../../models/Users.js";
 import { GoogleGenAI } from "@google/genai";
+import checkToken from "../../middleware/auth.js";
 import dotenv from "dotenv";
 dotenv.config();
 
