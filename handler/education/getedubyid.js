@@ -3,15 +3,8 @@ import Education from "../../models/Education.js";
 export const getEducationById = async (req, res) => {
   try {
     const { id } = req.params;
-    const index = parseInt(id); // convert to number
 
-    if (isNaN(index) || index < 0) {
-      return res.status(400).json({ message: "Invalid education index" });
-    }
-
-    const education = await Education.findOne()
-      .sort({ createdAt: 1 })
-      .skip(index);
+    const education = await Education.findById(id);
 
     if (!education) {
       return res.status(404).json({ message: "Education not found" });

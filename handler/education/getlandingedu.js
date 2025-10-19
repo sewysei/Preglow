@@ -3,7 +3,7 @@ import Education from "../../models/Education.js";
 export const getLandingEdu = async (req, res) => {
   try {
     const educations = await Education.find()
-      .select("title description -_id") // exclude _id field
+      .select("title description") // exclude _id field
       .sort({ createdAt: 1 });
 
     res.status(200).json(educations);
