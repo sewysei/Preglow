@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import ChatMessage from "../../models/ChatMessages.js";
 import checkToken from "../../middleware/auth.js";
-import { isBlacklisted } from "../middleware/auth.js";
+import { isBlacklisted } from "../../middleware/auth.js";
 import dotenv from "dotenv";
 dotenv.config();
 

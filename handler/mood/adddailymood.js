@@ -1,7 +1,7 @@
 import Mood from "../../models/Mood.js";
 import User from "../../models/Users.js";
 import checkToken from "../../middleware/auth.js";
-import { isBlacklisted } from "../middleware/auth.js";
+import { isBlacklisted } from "../../middleware/auth.js";
 
 export const addDailyMood = async (req, res) => {
   try {

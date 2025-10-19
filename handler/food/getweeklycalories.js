@@ -1,7 +1,7 @@
 import Food from "../../models/Food.js";
 import mongoose from "mongoose";
 import checkToken from "../../middleware/auth.js";
-import { isBlacklisted } from "../middleware/auth.js";
+import { isBlacklisted } from "../../middleware/auth.js";
 
 export const getWeeklyCalories = async (req, res) => {
   try {

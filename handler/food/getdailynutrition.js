@@ -1,6 +1,6 @@
 import Food from "../../models/Food.js";
 import checkToken from "../../middleware/auth.js";
-import { isBlacklisted } from "../middleware/auth.js";
+import { isBlacklisted } from "../../middleware/auth.js";
 
 export const getDailyNutrition = async (req, res) => {
   try {

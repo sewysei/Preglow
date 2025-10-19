@@ -1,6 +1,6 @@
 import { getMood } from "./getmood.js";
 import checkToken from "../../middleware/auth.js";
-import { isBlacklisted } from "../middleware/auth.js";
+import { isBlacklisted } from "../../middleware/auth.js";
 
 export const getDailyMood = async (req, res) => {
   try {

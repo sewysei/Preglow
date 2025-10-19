@@ -1,6 +1,6 @@
 import Comment from "../../models/Comment.js";
 import checkToken from "../../middleware/auth.js";
-import { isBlacklisted } from "../middleware/auth.js";
+import { isBlacklisted } from "../../middleware/auth.js";
 
 export const addComment = async (req, res) => {
   try {

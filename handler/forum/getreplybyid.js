@@ -1,6 +1,6 @@
 import Reply from "../../models/Reply.js";
 import checkToken from "../../middleware/auth.js";
-import { isBlacklisted } from "../middleware/auth.js";
+import { isBlacklisted } from "../../middleware/auth.js";
 
 export const getReplyById = async (req, res) => {
   try {

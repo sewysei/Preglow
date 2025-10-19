@@ -1,7 +1,7 @@
 import Forum from "../../models/Forum.js";
 import User from "../../models/Users.js";
 import checkToken from "../../middleware/auth.js";
-import { isBlacklisted } from "../middleware/auth.js";
+import { isBlacklisted } from "../../middleware/auth.js";
 
 export const addForum = async (req, res) => {
   try {
