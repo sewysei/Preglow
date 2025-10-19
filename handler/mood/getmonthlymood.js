@@ -1,4 +1,5 @@
 import { getMood } from "./getmood.js";
+import checkToken from "../../middleware/auth.js";
 
 export const getMonthlyMood = async (req, res) => {
   try {
