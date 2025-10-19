@@ -10,6 +10,6 @@ router.post("/add", upload.single("photo"), addForum);
 
 router.get("/all", getAllForum);
 
-router.get("/education/:id", getForumById);
+router.get("/:id", getForumById);
 
 export default router;
