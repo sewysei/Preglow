@@ -3,7 +3,6 @@ import checkToken from "../../middleware/auth.js";
 
 export const getForumComment = async (req, res) => {
   try {
-    const { id } = req.params;
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
@@ -25,6 +24,12 @@ export const getForumComment = async (req, res) => {
         message: "Unauthorized. User ID is missing.",
       });
     }
+    const forumId = req.params.id;
+    const comments = await Comment.find({ forumId })
+      .select("content")
+      .sort({ createdAt: 1 });
+
+    res.status(200).json(comments);
   } catch (error) {
     res.status(500).json({
       message: "A server error occurred: " + error.message,

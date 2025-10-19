@@ -26,6 +26,7 @@ export const changeUserStatus = async (req, res) => {
         message: "Unauthorized. User ID is missing.",
       });
     }
+
     const user = await User.findById(userId);
 
     if (!user) {
@@ -44,6 +45,16 @@ export const changeUserStatus = async (req, res) => {
     if (status === "Born") {
       user.pregnancy_date = null;
     }
+
+    if (status === "Pregnant") {
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, "0");
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const year = now.getFullYear();
+      const formattedDate = `${day}/${month}/${year}`;
+      user.pregnancy_date = formattedDate;
+    }
+
     user.pregnancy_status = status;
     await user.save();
     return res.status(200).json({
