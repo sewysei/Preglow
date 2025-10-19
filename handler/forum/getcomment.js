@@ -1,5 +1,6 @@
 import Comment from "../../models/Comment.js";
 import checkToken from "../../middleware/auth.js";
+import Reply from "../../models/Reply.js";
 
 export const getForumComment = async (req, res) => {
   try {
@@ -25,11 +26,24 @@ export const getForumComment = async (req, res) => {
       });
     }
     const forumId = req.params.id;
+
     const comments = await Comment.find({ forumId })
-      .select("content")
+      .select("content createdAt")
       .sort({ createdAt: 1 });
 
-    res.status(200).json(comments);
+    const commentsWithReplyCount = await Promise.all(
+      comments.map(async (comment) => {
+        const replyCount = await Reply.countDocuments({
+          commentId: comment._id,
+        });
+        return {
+          ...comment.toObject(),
+          totalReplies: replyCount,
+        };
+      })
+    );
+
+    res.status(200).json(commentsWithReplyCount);
   } catch (error) {
     res.status(500).json({
       message: "A server error occurred: " + error.message,
