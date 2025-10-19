@@ -3,19 +3,15 @@ import Comment from "../../models/Comment.js";
 
 export const getAllForum = async (req, res) => {
   try {
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-    let forumsQuery = Forum.find()
+    const forums = await Forum.find()
       .select("title question photo createdAt")
-      .sort({ createdAt: -1 });
-
-    if (!isNaN(page) && !isNaN(limit)) {
-      const skip = (page - 1) * limit;
-      forumsQuery = forumsQuery.skip(skip).limit(limit);
-    }
-
-    const forums = await forumsQuery;
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
     const forumIds = forums.map((f) => f._id);
 
@@ -34,19 +30,13 @@ export const getAllForum = async (req, res) => {
       totalComment: commentCountMap[forum._id.toString()] || 0,
     }));
 
-    let totalForums = 0;
-    let totalPages = 1;
-
-    if (!isNaN(page) && !isNaN(limit)) {
-      totalForums = await Forum.countDocuments();
-      totalPages = Math.ceil(totalForums / limit);
-    } else {
-      totalForums = forums.length;
-    }
+    const totalForums = await Forum.countDocuments();
+    const totalPages = Math.ceil(totalForums / limit);
 
     res.status(200).json({
-      currentPage: !isNaN(page) ? page : 0,
+      currentPage: page,
       totalPages,
+      limit,
       totalForums,
       forums: forumsWithCommentCount,
     });
