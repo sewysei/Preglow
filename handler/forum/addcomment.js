@@ -1,6 +1,7 @@
 import Comment from "../../models/Comment.js";
 import checkToken from "../../middleware/auth.js";
 import { isBlacklisted } from "../../middleware/auth.js";
+import Forum from "../../models/Forum.js";
 
 export const addComment = async (req, res) => {
   try {
@@ -33,7 +34,10 @@ export const addComment = async (req, res) => {
         message: "Unauthorized. User ID is missing.",
       });
     }
-
+    const checkForum = await Forum.findById(id);
+    if (!checkForum) {
+      return res.status(404).json({ message: "Forum not found" });
+    }
     const newComment = new Comment({
       userId,
       forumId: id,

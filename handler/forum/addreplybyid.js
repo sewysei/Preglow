@@ -1,4 +1,5 @@
 import Reply from "../../models/Reply.js";
+import Comment from "../../models/Comment.js";
 import checkToken from "../../middleware/auth.js";
 import { isBlacklisted } from "../../middleware/auth.js";
 
@@ -34,6 +35,13 @@ export const addReplyById = async (req, res) => {
     const { content } = req.body;
 
     const commentId = req.params.id;
+
+    const checkComment = await Comment.findById(commentId);
+    if (!checkComment) {
+      return res.status(404).json({
+        message: "Comment not found !",
+      });
+    }
 
     const newReply = new Reply({
       userId,

@@ -1,4 +1,5 @@
 import Forum from "../../models/Forum.js";
+import User from "../../models/Users.js";
 import checkToken from "../../middleware/auth.js";
 import { isBlacklisted } from "../../middleware/auth.js";
 import { v2 as cloudinary } from "cloudinary";
@@ -39,6 +40,13 @@ export const addForum = async (req, res) => {
     if (!userId) {
       return res.status(401).json({
         message: "Unauthorized. User ID is missing.",
+      });
+    }
+
+    const checkUser = await User.findById(userId);
+    if (!checkUser) {
+      return res.status(404).json({
+        message: "User not found!",
       });
     }
     if (!title || !question) {
