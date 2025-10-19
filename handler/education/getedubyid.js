@@ -11,7 +11,7 @@ export const getEducationById = async (req, res) => {
     }
 
     res.status(200).json({
-      message: "Success fetching education by index",
+      message: "Success fetching education by id",
       title: education.title,
       photo: education.photo,
       content: education.content,
