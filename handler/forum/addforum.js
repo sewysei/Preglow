@@ -1,6 +1,7 @@
 import Forum from "../../models/Forum.js";
 import User from "../../models/Users.js";
 import checkToken from "../../middleware/auth.js";
+import { isBlacklisted } from "../middleware/auth.js";
 
 export const addForum = async (req, res) => {
   try {
@@ -20,6 +21,11 @@ export const addForum = async (req, res) => {
         status: "Failed",
         message: expired ? "Token expired." : "Token invalid.",
       });
+    }
+    if (await isBlacklisted(token)) {
+      return res
+        .status(401)
+        .json({ message: "Token has been invalidated. Please login again." });
     }
     if (!userId) {
       return res.status(401).json({

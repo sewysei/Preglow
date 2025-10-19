@@ -1,5 +1,6 @@
 import User from "../../models/Users.js";
 import checkToken from "../../middleware/auth.js";
+import BlacklistToken from "../../models/BlacklistToken.js";
 
 export const logout = async (req, res) => {
   try {
@@ -12,18 +13,28 @@ export const logout = async (req, res) => {
 
     const token = authHeader.split(" ")[1];
     const { valid, expired, decoded } = checkToken(token);
-    const userId = decoded.id;
+
     if (!valid) {
       return res.status(401).json({
         message: expired ? "Token expired." : "Token invalid.",
       });
     }
 
+    const userId = decoded.id;
     const user = await User.findById(userId);
-    console.log(`User ${user.username} logged out.`);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    await BlacklistToken.create({
+      token,
+      expiredAt: new Date(decoded.exp * 1000),
+    });
+
+    console.log(`User ${user.username} logged out and token blacklisted.`);
 
     return res.status(200).json({
-      message: "Logout successful",
+      message: "Logout successful, token invalidated.",
     });
   } catch (error) {
     res.status(500).json({

@@ -1,5 +1,6 @@
 import { getMood } from "./getmood.js";
 import checkToken from "../../middleware/auth.js";
+import { isBlacklisted } from "../middleware/auth.js";
 
 export const getWeeklyMood = async (req, res) => {
   try {
@@ -18,6 +19,11 @@ export const getWeeklyMood = async (req, res) => {
       return res.status(401).json({
         status: "Failed",
         message: expired ? "Token expired." : "Token invalid.",
+      });
+    }
+    if (await isBlacklisted(token)) {
+      return res.status(401).json({
+        message: "Token has been invalidated. Please login again.",
       });
     }
     if (!userId) {

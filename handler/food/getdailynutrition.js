@@ -1,5 +1,6 @@
 import Food from "../../models/Food.js";
 import checkToken from "../../middleware/auth.js";
+import { isBlacklisted } from "../middleware/auth.js";
 
 export const getDailyNutrition = async (req, res) => {
   try {
@@ -19,6 +20,11 @@ export const getDailyNutrition = async (req, res) => {
         status: "Failed",
         message: expired ? "Token expired." : "Token invalid.",
       });
+    }
+    if (await isBlacklisted(token)) {
+      return res
+        .status(401)
+        .json({ message: "Token has been invalidated. Please login again." });
     }
     if (!userId) {
       return res.status(401).json({

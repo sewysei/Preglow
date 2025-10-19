@@ -1,5 +1,6 @@
 import Comment from "../../models/Comment.js";
 import checkToken from "../../middleware/auth.js";
+import { isBlacklisted } from "../middleware/auth.js";
 
 export const addComment = async (req, res) => {
   try {
@@ -21,6 +22,11 @@ export const addComment = async (req, res) => {
         status: "Failed",
         message: expired ? "Token expired." : "Token invalid.",
       });
+    }
+    if (await isBlacklisted(token)) {
+      return res
+        .status(401)
+        .json({ message: "Token has been invalidated. Please login again." });
     }
     if (!userId) {
       return res.status(401).json({
