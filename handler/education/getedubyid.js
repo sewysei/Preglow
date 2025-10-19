@@ -9,9 +9,8 @@ export const getEducationById = async (req, res) => {
       return res.status(400).json({ message: "Invalid education index" });
     }
 
-    // Skip `index` number of documents, then take 1
     const education = await Education.findOne()
-      .sort({ createdAt: 1 }) // oldest first
+      .sort({ createdAt: 1 })
       .skip(index);
 
     if (!education) {
