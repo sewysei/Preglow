@@ -26,11 +26,12 @@ export const getMonthlyMood = async (req, res) => {
       });
     }
 
-    const mood = await getMood(userId, 30);
+    const { result, total } = await getMood(userId, 30);
 
     return res.status(200).json({
       message: "Successfully fetched mood data for the past 30 days.",
-      mood_count: mood,
+      total_mood: total,
+      mood_count: result,
     });
   } catch (error) {
     res.status(500).json({
