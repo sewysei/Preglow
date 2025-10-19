@@ -20,6 +20,7 @@ export const getForumById = async (req, res) => {
       title: forum.title,
       question: forum.question,
       photo: forum.photo,
+      date: forum.createdAt,
       totalComments: commentCount,
     });
   } catch (error) {
