@@ -25,7 +25,7 @@ const moodSchema = new mongoose.Schema(
     },
     daily_feelings: {
       type: String,
-      required: true,
+      default: "",
     },
   },
   {

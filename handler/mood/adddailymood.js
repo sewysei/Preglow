@@ -57,24 +57,33 @@ export const addDailyMood = async (req, res) => {
       return res.status(400).json({ message: "Invalid mood category value." });
     }
 
-    if (!daily_feelings) {
-      return res.status(400).json({ message: "Daily Feelings is required" });
+    if (daily_feelings) {
+      const cleanData = daily_feelings.trim();
+      const newMood = new Mood({
+        userId: user._id,
+        category,
+        daily_feelings: cleanData,
+      });
+      await newMood.save();
+
+      res.status(200).json({
+        message: "Daily Feelings added successfully",
+        daily_mood: newMood,
+      });
+    } else {
+      const cleanData = "";
+      const newMood = new Mood({
+        userId: user._id,
+        category,
+        daily_feelings: cleanData,
+      });
+      await newMood.save();
+
+      res.status(200).json({
+        message: "Daily Feelings added successfully",
+        daily_mood: newMood,
+      });
     }
-
-    const cleanData = daily_feelings.trim();
-
-    const newMood = new Mood({
-      userId: user._id,
-      category,
-      daily_feelings: cleanData,
-    });
-
-    await newMood.save();
-
-    res.status(200).json({
-      message: "Daily Feelings added successfully",
-      daily_mood: newMood,
-    });
   } catch (error) {
     res.status(500).json({
       message: "A server error occurred: " + error.message,
