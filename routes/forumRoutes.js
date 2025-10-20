@@ -9,6 +9,7 @@ import { addReplyById } from "../handler/forum/addreplybyid.js";
 import { getReplyById } from "../handler/forum/getreplybyid.js";
 import { addReplyOfReply } from "../handler/forum/addreplyofreply.js";
 import { getReplyOfReply } from "../handler/forum/getreplyofreply.js";
+import { deleteForum } from "../handler/forum/deleteforum.js";
 
 const router = express.Router();
 
@@ -29,5 +30,7 @@ router.get("/get-reply/:id", getReplyById);
 router.post("/add-reofre/:id", addReplyOfReply);
 
 router.get("/get-reofre/:id", getReplyOfReply);
+
+router.delete("/delete/:id", deleteForum);
 
 export default router;

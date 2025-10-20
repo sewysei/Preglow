@@ -8,6 +8,7 @@ import { verifyForgotPass } from "../handler/AUTH/verifyforgot.js";
 import { resetPassword } from "../handler/AUTH/resetpass.js";
 import { verifyRegistration } from "../handler/AUTH/verifyregis.js";
 import { logout } from "../handler/AUTH/logout.js";
+import { deleteAcc } from "../handler/AUTH/deleteaccount.js";
 
 const router = express.Router();
 
@@ -28,5 +29,7 @@ router.post("/send-otp-reset", sendOTP);
 router.post("/reset-password", resetPassword);
 
 router.post("/logout", logout);
+
+router.delete("/delete", deleteAcc);
 
 export default router;
