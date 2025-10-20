@@ -71,7 +71,7 @@ export const addFood = async (req, res) => {
       });
       await newFood.save();
 
-      res.status(200).json({
+      return res.status(200).json({
         message: "Food added successfully",
         food: newFood,
       });
