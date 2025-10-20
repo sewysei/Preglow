@@ -5,6 +5,7 @@ import { getMonthlyMood } from "../handler/mood/getmonthlymood.js";
 import { getDailyMood } from "../handler/mood/getdailymood.js";
 import { deleteMood } from "../handler/mood/deletemood.js";
 import { getAllMood } from "../handler/mood/getallmood.js";
+import { getMoodById } from "../handler/mood/getmoodbyid.js";
 
 const router = express.Router();
 
@@ -17,6 +18,8 @@ router.get("/weekly-mood", getWeeklyMood);
 router.get("/monthly-mood", getMonthlyMood);
 
 router.get("/all", getAllMood);
+
+router.get("/get/:id", getMoodById);
 
 router.delete("/delete/:id", deleteMood);
 
