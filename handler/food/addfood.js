@@ -80,12 +80,14 @@ export const addFood = async (req, res) => {
     const result = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: `
-      Berikan saya informasi nutrisi dari makanan bernama "${name}" dalam format JSON dengan atribut:
+      Berikan saya informasi nutrisi dari makanan bernama "${name}" dalam format JSON dengan atribut
+      cari juga kategorinya (Food, Drink, Snack, atau Supplement):
       {
         "kalori": (dalam kkal),
         "protein": (dalam gram),
         "karbohidrat": (dalam gram),
-        "lemak": (dalam gram)
+        "lemak": (dalam gram),
+        "kategori": dalam string
       }
       Jangan gunakan format markdown seperti cetak tebal (**) atau miring (*).
       Jangan gunakan frasa pembuka seperti "Tentu" atau "Berikut adalah".
@@ -109,10 +111,12 @@ export const addFood = async (req, res) => {
     const protein = parseFloat(nutrition.protein) || 0;
     const carbs = parseFloat(nutrition.karbohidrat) || 0;
     const fat = parseFloat(nutrition.lemak) || 0;
+    const foodCategory = nutrition.kategori || "food";
 
     const newFood = new Food({
       userId: user._id,
       category,
+      foodCategory,
       name,
       calories,
       protein,
