@@ -59,7 +59,7 @@ export const chatbot = async (req, res) => {
           Jawablah hanya pertanyaan seputar kehamilan, nutrisi selama kehamilan,
           makanan untuk ibu hamil, mengenai bayi dan awal mula kehamilan.
           Jika pertanyaan di luar topik, tolak secara sopan dengan mengatakan 
-          "Maaf, saya hanya bisa menjawab pertanyaan seputar gizi kehamilan."
+          "Maaf, saya hanya bisa menjawab pertanyaan seputar kehamilan dan nutrisi selama kehamilan."
           Jangan gunakan format markdown seperti cetak tebal (**) atau miring (*).
           Jangan gunakan frasa pembuka seperti "Tentu" atau "Berikut adalah".
           Jangan gunakan tanda kutip tiga (\`\`\`). Jawaban tidak lebih dari 300 kata. 
