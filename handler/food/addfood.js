@@ -57,7 +57,7 @@ export const addFood = async (req, res) => {
       return res.status(400).json({ message: "Invalid food category value." });
     }
 
-    const sameFood = await Food.findOne({ name: name.trim() });
+    const sameFood = await Food.findOne({ name: await name.trim() });
 
     if (sameFood) {
       const newFood = new Food({

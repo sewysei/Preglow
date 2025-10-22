@@ -50,7 +50,7 @@ export const getAllFood = async (req, res) => {
       totalPages,
       limit,
       totalFoods,
-      moods: foods,
+      foods: foods,
     });
   } catch (error) {
     res.status(500).json({
