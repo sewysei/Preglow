@@ -34,7 +34,7 @@ export const logout = async (req, res) => {
     console.log(`User ${user.username} logged out and token blacklisted.`);
 
     return res.status(200).json({
-      message: "Logout successful, token invalidated.",
+      message: "Logout successful",
     });
   } catch (error) {
     res.status(500).json({
