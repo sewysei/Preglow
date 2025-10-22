@@ -42,7 +42,11 @@ export const getAllFood = async (req, res) => {
       .limit(limit);
 
     const totalFoods = await Food.countDocuments({ userId });
-
+    const formattedFoods = foods.map((food) => ({
+      category: food.category,
+      name: food.name.trim(),
+      calories: `${food.calories} kcal`,
+    }));
     const totalPages = Math.ceil(totalFoods / limit);
 
     res.status(200).json({
@@ -50,7 +54,7 @@ export const getAllFood = async (req, res) => {
       totalPages,
       limit,
       totalFoods,
-      foods: foods,
+      foods: formattedFoods,
     });
   } catch (error) {
     res.status(500).json({

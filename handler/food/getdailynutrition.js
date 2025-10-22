@@ -46,7 +46,7 @@ export const getDailyNutrition = async (req, res) => {
       createdAt: { $gte: startOfDay, $lte: endOfDay },
     });
 
-    const totalNutrition = foods.reduce(
+    let totalNutrition = foods.reduce(
       (acc, food) => {
         acc.calories += food.calories || 0;
         acc.protein += food.protein || 0;
@@ -54,8 +54,20 @@ export const getDailyNutrition = async (req, res) => {
         acc.fat += food.fat || 0;
         return acc;
       },
-      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+      {
+        calories: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+      }
     );
+
+    totalNutrition = {
+      calories: `${totalNutrition.calories} kcal`,
+      protein: `${totalNutrition.protein} g`,
+      carbs: `${totalNutrition.carbs} g`,
+      fat: `${totalNutrition.fat} g`,
+    };
 
     const lastFood = await Food.findOne({
       userId,
@@ -64,10 +76,10 @@ export const getDailyNutrition = async (req, res) => {
 
     const lastNutrition = lastFood
       ? {
-          calories: lastFood.calories || 0,
-          protein: lastFood.protein || 0,
-          carbs: lastFood.carbs || 0,
-          fat: lastFood.fat || 0,
+          calories: (lastFood.calories || 0) + " kcal",
+          protein: (lastFood.protein || 0) + " g",
+          carbs: (lastFood.carbs || 0) + " g",
+          fat: (lastFood.fat || 0) + " g",
         }
       : null;
 

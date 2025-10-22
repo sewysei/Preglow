@@ -67,14 +67,19 @@ export const getWeeklyCalories = async (req, res) => {
         $project: {
           _id: 0,
           date: "$_id",
-          totalCalories: "$totalCalories",
+          totalCalories: 1,
         },
       },
     ]);
 
+    // ✅ Tambahkan satuan "kcal" di sini
+    const formattedCalories = weeklyCalories.map((item) => ({
+      date: item.date,
+      totalCalories: `${item.totalCalories} kcal`,
+    }));
     return res.status(200).json({
       message: "Success fetching weekly calories",
-      weeklyCalories,
+      formattedCalories,
     });
   } catch (error) {
     res.status(500).json({
