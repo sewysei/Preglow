@@ -28,6 +28,9 @@ export const getMood = async (userId, duration) => {
           count: 1,
         },
       },
+      {
+        $sort: { category: 1 },
+      },
     ]);
 
     const total = result.length;
