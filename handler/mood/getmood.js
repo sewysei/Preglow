@@ -33,9 +33,17 @@ export const getMood = async (userId, duration) => {
       },
     ]);
 
-    const total = result.length;
+    // Hitung total semua mood
+    const total = result.reduce((sum, item) => sum + item.count, 0);
 
-    return { result, total };
+    // Tambahkan field persentase ke setiap item
+    const resultWithPercentage = result.map((item) => ({
+      ...item,
+      percentage:
+        total > 0 ? ((item.count / total) * 100).toFixed(1) + "%" : "0%",
+    }));
+
+    return { result: resultWithPercentage, total };
   } catch (error) {
     console.error("Error in getMood:", error.message);
     throw new Error("A server error occurred: " + error.message);

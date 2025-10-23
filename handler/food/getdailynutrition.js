@@ -76,10 +76,10 @@ export const getDailyNutrition = async (req, res) => {
 
     const lastNutrition = lastFood
       ? {
-          calories: (lastFood.calories || 0) + " kcal",
-          protein: (lastFood.protein || 0) + " g",
-          carbs: (lastFood.carbs || 0) + " g",
-          fat: (lastFood.fat || 0) + " g",
+          calories: `${lastFood.calories} kcal`,
+          protein: `${lastFood.protein} g`,
+          carbs: `${lastFood.carbs} g`,
+          fat: `${lastFood.fat} g`,
         }
       : null;
 
