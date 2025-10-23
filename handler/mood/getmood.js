@@ -33,14 +33,18 @@ export const getMood = async (userId, duration) => {
       },
     ]);
 
-    // Hitung total semua mood
-    const total = result.reduce((sum, item) => sum + item.count, 0);
+    // Total jenis mood yang ditemukan
+    const total = result.length;
 
-    // Tambahkan field persentase ke setiap item
+    // Tambahkan field persentase ke setiap item (berdasarkan total count, bukan total jenis)
+    const totalCount = result.reduce((sum, item) => sum + item.count, 0);
+
     const resultWithPercentage = result.map((item) => ({
       ...item,
       percentage:
-        total > 0 ? ((item.count / total) * 100).toFixed(1) + "%" : "0%",
+        totalCount > 0
+          ? ((item.count / totalCount) * 100).toFixed(1) + "%"
+          : "0%",
     }));
 
     return { result: resultWithPercentage, total };
