@@ -56,14 +56,14 @@ export const addFood = async (req, res) => {
     if (!allowedCategory.includes(category)) {
       return res.status(400).json({ message: "Invalid food category value." });
     }
-
-    const sameFood = await Food.findOne({ name: await name.trim() });
+    const cleanName = await name.trim();
+    const sameFood = await Food.findOne({ name: cleanName });
 
     if (sameFood) {
       const newFood = new Food({
         userId: user._id,
         category,
-        name,
+        name: cleanName,
         calories: sameFood.calories,
         protein: sameFood.protein,
         carbs: sameFood.carbs,
@@ -80,7 +80,7 @@ export const addFood = async (req, res) => {
     const result = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: `
-      Berikan saya informasi nutrisi dari makanan bernama "${name}" dalam format JSON dengan atribut
+      Berikan saya informasi nutrisi dari makanan bernama "${cleanName}" dalam format JSON dengan atribut
       cari juga kategorinya (Food, Drink, Snack, atau Supplement):
       {
         "kalori": (dalam kkal),
@@ -117,7 +117,7 @@ export const addFood = async (req, res) => {
       userId: user._id,
       category,
       foodCategory,
-      name,
+      name: cleanName,
       calories,
       protein,
       carbs,

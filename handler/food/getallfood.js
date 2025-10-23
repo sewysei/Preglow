@@ -36,14 +36,14 @@ export const getAllFood = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const foods = await Food.find({ userId })
-      .select("category name calories -_id")
+      .select("foodCategory name calories -_id")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
     const totalFoods = await Food.countDocuments({ userId });
     const formattedFoods = foods.map((food) => ({
-      category: food.category,
+      category: food.foodCategory,
       name: food.name.trim(),
       calories: `${food.calories} kcal`,
     }));
