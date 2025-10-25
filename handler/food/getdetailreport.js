@@ -238,14 +238,30 @@ export const getDetailReport = async (req, res) => {
         const pdfBase64 = pdfBuffer.toString("base64");
         const dataURI = `data:application/pdf;base64,${pdfBase64}`;
 
-        // Upload ke Cloudinary
+        // --- HAPUS FILE LAMA DULU ---
+        // Cari semua file user ini di folder preglow-reports
+        const oldFiles = await cloudinary.api.resources({
+          type: "upload",
+          prefix: `preglow-reports/PreglowReport-${user.username}`,
+          resource_type: "image",
+        });
+
+        // Hapus semuanya
+        for (const file of oldFiles.resources) {
+          await cloudinary.uploader.destroy(file.public_id, {
+            resource_type: "image",
+            invalidate: true,
+          });
+        }
+
+        // --- Baru Upload PDF Baru ---
         const uploadResult = await cloudinary.uploader.upload(dataURI, {
           folder: "preglow-reports",
           public_id: `PreglowReport-${user.username}-${Date.now()}`,
           resource_type: "auto",
           format: "pdf",
         });
-        // Respon URL Cloudinary
+
         res.status(200).json({
           message: "Report generated successfully",
           reportUrl: uploadResult.secure_url,

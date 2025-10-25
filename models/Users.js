@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
+    lastReportPublicId: {
+      type: String,
+      default: null,
+    },
     verificationCode: {
       type: String,
       select: false,
