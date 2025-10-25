@@ -41,7 +41,7 @@ export const getDailyNutrition = async (req, res) => {
     let startOfDay, endOfDay, displayDate;
 
     if (date) {
-      const [day, month, year] = date.split("/").map(Number);
+      const [day, month, year] = date.split("-").map(Number);
       startOfDay = new Date(year, month - 1, day, 0, 0, 0, 0);
       endOfDay = new Date(year, month - 1, day, 23, 59, 59, 999);
       displayDate = date;
