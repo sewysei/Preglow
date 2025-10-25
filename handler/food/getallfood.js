@@ -36,7 +36,7 @@ export const getAllFood = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const foods = await Food.find({ userId })
-      .select("foodCategory name calories -_id")
+      .select("foodCategory name calories createdAt -_id")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -46,6 +46,7 @@ export const getAllFood = async (req, res) => {
       category: food.foodCategory,
       name: food.name.trim(),
       calories: `${food.calories} kcal`,
+      date: food.createdAt,
     }));
     const totalPages = Math.ceil(totalFoods / limit);
 
