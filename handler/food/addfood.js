@@ -118,7 +118,7 @@ export const addFood = async (req, res) => {
     const protein = formatNumber(parseFloat(nutrition.protein) || 0);
     const carbs = formatNumber(parseFloat(nutrition.karbohidrat) || 0);
     const fat = formatNumber(parseFloat(nutrition.lemak) || 0);
-    const foodCategory = nutrition.kategori || "food";
+    const foodCategory = nutrition.kategori || "Food";
 
     const newFood = new Food({
       userId: user._id,
