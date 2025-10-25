@@ -30,6 +30,12 @@ export const register = async (req, res) => {
         .json({ message: "Username or Email already in use" });
     }
 
+    if (!/@gmail\.com$/i.test(email)) {
+      return res.status(400).json({
+        message: "Only Gmail addresses are allowed.",
+      });
+    }
+
     const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
 
     const newUser = new User({
