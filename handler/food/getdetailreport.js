@@ -8,7 +8,6 @@ import fs from "fs";
 import path from "path";
 import { v2 as cloudinary } from "cloudinary";
 
-// --- Konfigurasi Cloudinary ---
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -246,7 +245,6 @@ export const getDetailReport = async (req, res) => {
           resource_type: "auto",
           format: "pdf",
         });
-
         // Respon URL Cloudinary
         res.status(200).json({
           message: "Report generated successfully",
