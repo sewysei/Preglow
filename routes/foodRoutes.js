@@ -5,15 +5,12 @@ import { getWeeklyCalories } from "../handler/food/getweeklycalories.js";
 import { getDetailReport } from "../handler/food/getdetailreport.js";
 import { getAllFood } from "../handler/food/getallfood.js";
 import { getLastFood } from "../handler/food/getlastfood.js";
-import { getNutritionByDate } from "../handler/food/getnutritionbydate.js";
 
 const router = express.Router();
 
 router.post("/add", addFood);
 
-router.get("/nutrition", getNutritionByDate);
-
-router.get("/daily-nutrition", getDailyNutrition);
+router.get("/nutrition", getDailyNutrition);
 
 router.get("/weekly-nutrition", getWeeklyCalories);
 
